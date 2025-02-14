@@ -1,31 +1,28 @@
-//
-//  DogModel.swift
-//  DogApp
-//
-//  Created by Della Anjeh on 2/13/25.
-//
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
 // To parse the JSON, add this file to your project and do:
 //
-//   let welcome = try? JSONDecoder().decode(Welcome.self, from: jsonData)
+//   let dogModel = try? JSONDecoder().decode(DogModel.self, from: jsonData)
+
 import Foundation
 
-struct Welcome: Codable {
-    let breeds: [DogModel]
-    let id: String
-    let url: String
-    let width, height: Int
-}
-
-// MARK: - DogModel
-struct DogModel: Codable, Identifiable {
-    let id, name: String
-    let bredFor: String
+// MARK: - Breed
+struct Breed: Codable, Identifiable {
+    let weight, height: Weight
+    let id: Int
+    let name, countryCode, bredFor, lifeSpan: String
+    let temperament, referenceImageID: String
 
     enum CodingKeys: String, CodingKey {
-        case id, name
+        case weight, height, id, name
+        case countryCode = "country_code"
         case bredFor = "bred_for"
+        case lifeSpan = "life_span"
+        case temperament
+        case referenceImageID = "reference_image_id"
     }
 }
 
-
+// MARK: - Eight
+struct Weight: Codable {
+    let imperial, metric: String
+}
