@@ -5,31 +5,24 @@
 //  Created by Della Anjeh on 2/13/25.
 //
 
-import Foundation
+import Observation
 
-class ListViewModel: ObservableObject {
+@Observable
+class ListViewModel {
+  enum State: Equatable {
+    case loading
+    case loaded(breeds: [Breed])
+    case error
+  }
 
-    let apiKey = "live_mP2JuJcv5l0H27RsikVmzY4GLStggdcUXYl0SyRjevuP57TYP0JB9gGr0d4VjIEh"
-    
-    func getDogs() async throws -> [Breed]? {
-        let endpoint = "https://api.thedogapi.com/v1/images/search?limit=50?api_key=\(apiKey)"
-        if let url = URL(string: endpoint) {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let decoder = JSONDecoder()
-                let dogs = try! decoder.decode([Breed].self, from: data)
-                return dogs
-            } catch {
-                return nil
-            }
-        } else {
-            return nil
-        }
+  var state: State = .loading
+
+  func loadBreeds() async {
+    let breeds = await BreedLoader.loadBreeds()
+    if let breeds {
+      state = .loaded(breeds: breeds)
+    } else {
+      state = .error
     }
-}
-
-enum DogError: Error {
-    case invalidUrl
-    case invalidResponse
-    case invalidData
+  }
 }

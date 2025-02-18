@@ -10,29 +10,34 @@ import SwiftUI
 struct ListView: View {
     
     private var listViewModel = ListViewModel()
-    @State private var dogs: [Breed] = []
     var body: some View {
         NavigationStack {
-            ScrollView {
-                List {
-                    ForEach(dogs, id: \.id) { dog in
-                        VStack {
-                            Text(dog.name)
-                                .foregroundStyle(.black)
-                                .font(.headline)
-                        }
-                    }
+            VStack {
+                switch listViewModel.state {
+                case .loading:
+                    ProgressView()
+                case .loaded(let breeds):
+                    list(of: breeds)
+                case .error:
+                    Text("something is wrong")
                 }
             }
+             .navigationTitle("Dog Breeds")
+           }
             .task {
-                dogs = try await listViewModel.getDogs() ?? []
+                await listViewModel.loadBreeds()
             }
         }
+    }
+
+func list(of breeds: [Breed]) -> some View {
+    List(breeds) { breed in
+        Text(breed.name)
     }
 }
 
 #Preview {
     NavigationView {
-        ListView(listViewModel: ListViewModel())
+        ListView()
     }
 }

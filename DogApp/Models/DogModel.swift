@@ -6,14 +6,13 @@
 import Foundation
 
 // MARK: - Breed
-struct Breed: Codable, Identifiable {
-    let weight, height: Weight
-    let id: Int
+struct Breed: Codable, Equatable, Identifiable {
+    var id: String { name }
     let name, countryCode, bredFor, lifeSpan: String
     let temperament, referenceImageID: String
 
     enum CodingKeys: String, CodingKey {
-        case weight, height, id, name
+        case name
         case countryCode = "country_code"
         case bredFor = "bred_for"
         case lifeSpan = "life_span"
@@ -22,7 +21,3 @@ struct Breed: Codable, Identifiable {
     }
 }
 
-// MARK: - Eight
-struct Weight: Codable {
-    let imperial, metric: String
-}
