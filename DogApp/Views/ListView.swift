@@ -10,12 +10,12 @@ import SwiftUI
 struct ListView: View {
     
     private var listViewModel = ListViewModel()
-    
+    @State private var dogs: [Breed] = []
     var body: some View {
         NavigationStack {
             ScrollView {
                 List {
-                    ForEach(listViewModel.dogs, id: \.id) { dog in
+                    ForEach(dogs, id: \.id) { dog in
                         VStack {
                             Text(dog.name)
                                 .foregroundStyle(.black)
@@ -25,7 +25,7 @@ struct ListView: View {
                 }
             }
             .task {
-                await listViewModel.getDogs()
+                dogs = try await listViewModel.getDogs() ?? []
             }
         }
     }

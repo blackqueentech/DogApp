@@ -8,14 +8,10 @@
 import Foundation
 
 class ListViewModel: ObservableObject {
-    @Published var dogs: [Breed] = []
-    init() async {
-        self.dogs = await getDogs() ?? []
-    }
-    
+
     let apiKey = "live_mP2JuJcv5l0H27RsikVmzY4GLStggdcUXYl0SyRjevuP57TYP0JB9gGr0d4VjIEh"
     
-    func getDogs() async -> [Breed]? {
+    func getDogs() async throws -> [Breed]? {
         let endpoint = "https://api.thedogapi.com/v1/images/search?limit=50?api_key=\(apiKey)"
         if let url = URL(string: endpoint) {
             do {
